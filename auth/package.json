@@ -9,7 +9,7 @@
     "prettier:fix": "echo fixing Pretier formatting",
     "start:dev": "nodemon src/index.ts",
     "start": "echo starting prod server",
-    "test": "jest"
+    "test": "jest --watchAll --no-cache"
   },
   "jest": {
     "preset": "ts-jest",
@@ -19,7 +19,9 @@
   "author": "Soren Ervik",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "express": "^4.18.3",
+    "express-validator": "^7.0.1",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
