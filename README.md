@@ -12,3 +12,6 @@ npm install nodemon
 npm install --save-dev eslint eslint-config-airbnb-base eslint-plugin-import
 npm install --save-dev @types/supertest --force
 npm i --save-dev @types/jest --force
+
+npm install body-parser --force
+npm install express-validator --force
