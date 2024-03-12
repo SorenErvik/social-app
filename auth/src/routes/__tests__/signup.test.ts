@@ -14,9 +14,15 @@ describe('Test validity of email input', () => {
         password = 'Validpassword1';
     });
 
+    it('Should return 422 if the email is not provided', () => {
+        return request(app).post('/api/auth/signup').send({ password }).expect(422);
+    });
     it('Should return 422 if the email is not valid', async () => {
         await request(app).post('/api/auth/signup').send({}).expect(422);
         await request(app).post('/api/auth/signup').send({email: 'invalidEmail', password}).expect(422);
+    });
+    it('Should return 200 if the email is valid', async () => {
+        await request(app).post('/api/auth/signup').send({email: 'test@test.com', password }).expect(200);
     });
 });
 
@@ -33,19 +39,26 @@ describe('test validity of password input', () => {
     beforeAll(() => {
         email = 'test@test.com';
     });
-    it('Should return 422 if the passowrd contains less than 8 characters', async () => {
-        
-    });
-    it('Should return 422 if the pasword contains more than 32 characters', async () => {
-       
-    });
-    it('Should return 422 if the password does not contain atleast one lowercase letter', async () => {
 
+    it('Should return 422if the password is not provided', async () => {
+        await request(app).post('/api/auth/signup').send({email}).expect(422);
+    });
+    it('Should return 422 if the passowrd contains less than 8 characters', async () => {
+        await request(app).post('/api/auth/signup').send({email, password: 'Valid12'}).expect(422);
+    });
+    it('Should return 422 if the password contains more than 32 characters', async () => {
+       await request(app).post('/api/auth/signup').send({email, password: 'Validpassword123456789012345678901234567890'}).expect(422);
+    });
+    it('Should return 422 if the password does not contain at least one lowercase letter', async () => {
+        await request(app).post('/api/auth/signup').send({email, password: 'VALIDPASSWORD1'}).expect(422);
     });
     it('Should return 422 if the password does not contain atleast one uppercase letter', async () => {
-
+        await request(app).post('/api/auth/signup').send({email, password: 'validpassword1'}).expect(422);
     });
     it('Should return 422 if the password does not contain atleast one number', async () => {
-
+        await request(app).post('/api/auth/signup').send({email, password: 'Validpassword'}).expect(422);
+    });
+    it('Should return 200 if the password is valid', async () => {
+        await request(app).post('/api/auth/signup').send({email, password: 'Validpassword1'}).expect(200);
     });
 });
