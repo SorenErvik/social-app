@@ -3,7 +3,8 @@ import { body, validationResult } from 'express-validator';
 
 const signupRouter = express.Router();
 
-signupRouter.post('/api/auth/signup', [body('email').isEmail().withMessage('Email must be in a valid format')
+
+signupRouter.post('/api/auth/signup', [body('email').isEmail().withMessage('Email must be in a valid format'), body('password').isLength({ min: 8 }).withMessage('Password must be in valid format')
 ], (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
