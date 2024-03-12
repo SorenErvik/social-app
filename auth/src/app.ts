@@ -1,9 +1,9 @@
-import routes from './routes';
+
 
 import { json } from 'body-parser';
 import express from 'express';
 
-const { signupRouter } = routes;
+import { signupRouter } from './routes';
 
 const app = express();
 
