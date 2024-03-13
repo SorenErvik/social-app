@@ -1,14 +1,16 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import { handleMethodNotAllowed } from './utils';
 
 export const SIGNUP_ROUTE = '/api/auth/signup';
 
 const signupRouter = express.Router();
 
 
+
 signupRouter.post(SIGNUP_ROUTE, [
     body('email').isEmail().withMessage('Email must be in a valid format'), 
-body('password').trim().isLength({ min: 8, max: 32 }).withMessage('Password must be between 8 adn 32 characters in length'),
+body('password').trim().isLength({ min: 8, max: 32 }).withMessage('Password must be between 8 and 32 characters in length'),
 body('password').matches(/^(.*[a-z].*)$/).withMessage('Password must contain at least one lowercase letter'),
 body('password').matches(/^(.*[A-Z].*)$/).withMessage('Password must contain at least one uppercase letter'),
 body('password').matches(/^(.*[0-9].*)$/).withMessage('Password must contain at least one number')
@@ -20,8 +22,17 @@ body('password').matches(/^(.*[0-9].*)$/).withMessage('Password must contain at 
     res.send({});
 })
 
-signupRouter.all(SIGNUP_ROUTE, (req, res) => {
-    res.status(405).send({});
+signupRouter.options(SIGNUP_ROUTE, (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.sendStatus(200);
 });
+
+
+signupRouter.get(SIGNUP_ROUTE, handleMethodNotAllowed);
+signupRouter.put(SIGNUP_ROUTE, handleMethodNotAllowed);
+signupRouter.delete(SIGNUP_ROUTE, handleMethodNotAllowed);
+signupRouter.patch(SIGNUP_ROUTE, handleMethodNotAllowed);
 
 export default signupRouter;
