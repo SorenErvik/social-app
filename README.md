@@ -15,3 +15,6 @@ npm install --save-dev @types/jest --force
 
 npm install body-parser --force
 npm install express-validator --force
+
+npm install mongodb-memory-server --save-dev
+npm install mongoose --save

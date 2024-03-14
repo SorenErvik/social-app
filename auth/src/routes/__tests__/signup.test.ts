@@ -85,3 +85,17 @@ describe('tests sanitization of password input', () => {
         }).expect(200);
     });
 });
+
+describe('tests saving the signed up user to the database', () => {
+    it('saves the user successfully as long as the information is valid', () => {
+        // Send valid user information
+        //Receive the user information back from the route
+        // Check whether I can find the user in the database by using the _id or email property
+    });
+
+    it('does not allow saving a suer with a duplicate email', () => {
+        // Send valid user information
+        // Send the same user information again
+        // Should return the respective HTTP error code 
+    });
+});

@@ -17,15 +17,15 @@ body('password').matches(/^(.*[0-9].*)$/).withMessage('Password must contain at 
 ], (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.sendStatus(422);
+        return res.sendStatus(422);
     }
 
     if(/.+@[A-Z]/g.test(req.body.email)) {
-        res.sendStatus(422);
+        return res.sendStatus(422);
     }
 
     if(/[><'"']/g.test(req.body.password)) {
-        res.sendStatus(422);
+        return res.sendStatus(422);
     }
 
     res.send({email: req.body.email});
