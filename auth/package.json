@@ -14,7 +14,10 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test-utils/setup-after-env.ts"
+    ]
   },
   "keywords": [],
   "author": "Soren Ervik",
@@ -31,6 +34,7 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^20.11.25",
     "@types/supertest": "^6.0.2",
     "eslint": "^8.57.0",
