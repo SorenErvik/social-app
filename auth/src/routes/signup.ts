@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { User } from '../models';
 
+import { InvalidInput } from '../errors/invalid-input';
+
 export const SIGNUP_ROUTE = '/api/auth/signup';
 
 const signupRouter = express.Router();
@@ -18,7 +20,7 @@ body('password').matches(/^(.*[0-9].*)$/).withMessage('Password must contain at 
 ], async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.sendStatus(422);
+        throw new InvalidInput();
     }
 
     if(/.+@[A-Z]/g.test(req.body.email)) {
@@ -31,8 +33,15 @@ body('password').matches(/^(.*[0-9].*)$/).withMessage('Password must contain at 
 
 const { email, password } = req.body;
 
+try {
+    const newUser = await User.create({ email, password });
+    return res.status(201).send({email: newUser.email });
+} catch(e) {
+    return res.sendStatus(422);
+}
 
-const existingUser = await User.findOne({ email });
+
+/*const existingUser = await User.findOne({ email });
 
 if (existingUser) {
     return res.sendStatus(422);
@@ -41,7 +50,8 @@ if (existingUser) {
 const newUser = await User.create({ email, password});
 
     res.status(201).send({ email: newUser.email });
-})
+}) */
+});
 
 
 export default signupRouter;
