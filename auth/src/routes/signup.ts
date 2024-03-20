@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { FieldValidationError, body, validationResult } from 'express-validator';
 import { User } from '../models';
 
-import { InvalidInput } from '../errors';
+import { DuplicatedEmail, InvalidInput } from '../errors';
 
 export const SIGNUP_ROUTE = '/api/auth/signup';
 
@@ -28,20 +28,36 @@ signupRouter.post(
       .withMessage('Password must contain at least one number')
   ],
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    const errorsArray = errors.array();
+    const errors = validationResult(req).array();
+    //const errorsArray = errors.array();
 
-    if (!errors.isEmpty()) {
-      throw new InvalidInput();
+      if (/.+@[A-Z]/g.test(req.body.email)) {
+        const emailError: FieldValidationError = {
+            value: req.body.email,
+            msg: 'Email is not normalized',
+            path: 'email',
+            location: 'body',
+            type: 'field'
+        };
+        errors.push(emailError);
     }
 
-    if (/.+@[A-Z]/g.test(req.body.email)) {
-      return res.sendStatus(422);
+      if (/[><'"']/g.test(req.body.password)) {
+        const emailError: FieldValidationError = {
+          value: req.body.password,
+          msg: 'Password contains invalid characters',
+          path: 'password',
+          location: 'body',
+          type: 'field'
+      };
+      errors.push(emailError);
+      }
+
+    if (errors.length > 0) {
+      throw new InvalidInput(errors);
     }
 
-    if (/[><'"']/g.test(req.body.password)) {
-      return res.sendStatus(422);
-    }
+    
 
     const { email, password } = req.body;
 
@@ -49,7 +65,7 @@ signupRouter.post(
       const newUser = await User.create({ email, password });
       return res.status(201).send({ email: newUser.email });
     } catch (e) {
-      return res.sendStatus(422);
+      throw new DuplicatedEmail();
     }
 
     /*const existingUser = await User.findOne({ email });
