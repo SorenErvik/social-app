@@ -1,5 +1,3 @@
-
-
 import { json } from 'body-parser';
 import express from 'express';
 import 'express-async-errors';
@@ -14,6 +12,5 @@ app.use(json());
 app.use(signupRouter);
 
 app.use(errorHandler);
-
 
 export default app;
