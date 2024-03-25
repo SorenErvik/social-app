@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { BaseCustomError } from '../errors/base-custom-error';
+import BaseCustomError from '../errors/base-custom-error';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof BaseCustomError) {
